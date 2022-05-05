@@ -6,7 +6,7 @@ public class Sum {
         System.out.println("Sum:" + sum(8, 10));
     }
 
-    private static int sum (int a, int b) {
+    private static int sum(int a, int b) {
         return a + b;
     }
 }
