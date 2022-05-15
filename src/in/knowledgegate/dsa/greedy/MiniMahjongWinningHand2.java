@@ -1,124 +1,150 @@
-package in.knowledgegate.dsa.maps;
+package in.knowledgegate.dsa.greedy;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * You're creating a game with some amusing mini-games,
- * and you've decided to make a simple variant of
- * the game Mahjong.
- *
- * In this variant, players have a number of tiles,
- * each marked 0-9. The tiles can be grouped into
- * pairs or triples of the same tile. For example,
- * if a player has "33344466", the player's hand
- * has a triple of 3s, a triple of 4s, and a pair
- * of 6s. Similarly, "55555777" has a triple of 5s,
- * a pair of 5s, and a triple of 7s.
- *
- * A "complete hand" is defined as a collection
- * of tiles where all the tiles can be grouped
- * into any number of triples (zero or more) and
- * exactly one pair, and each tile is used in
- * exactly one triple or pair.
- *
- * Write a function that takes a string representation of a collection of tiles in no particular order, and returns true or false depending on whether or not the collection represents a complete hand.
- *
- * tiles1 = "11133555"           # True.  111 33 555
- * tiles2 = "111333555"          # False. There are three triples, 111 333 555 but no pair.
- * tiles3 = "00000111"           # True.  000 00 111. Your pair and a triplet can be of the same value
- *                               #        There is also no limit to how many of each tile there is.
- * tiles4 = "13233121"           # True.  Tiles are not guaranteed to be in order
- * tiles5 = "11223344555"        # False. There cannot be more than one pair
- * tiles6 = "99999999"           # True.  You can have many of one tile
- * tiles7 = "999999999"          # False.
- * tiles8 = "9"                  # False.
- * tiles9 = "99"                 # True.  One pair.
- * tiles10 = "000022"            # False.
- * tiles11 = "888889"            # False. There cannot be any tiles left over.
- * tiles12 = "889"               # False. There cannot be any tiles left over.
- * tiles13 = "88888844"          # True.  Two triples and one pair
- * tiles14 = "77777777777777"    # True.  Four triples and one pair
- * tiles15 = "1111111"       	  # False.
- * tiles16 = "1111122222"        # False.
- *
- * complete(tiles1)  => True
- * complete(tiles2)  => False
- * complete(tiles3)  => True
- * complete(tiles4)  => True
- * complete(tiles5)  => False
- * complete(tiles6)  => True
- * complete(tiles7)  => False
- * complete(tiles8)  => False
- * complete(tiles9)  => True
- * complete(tiles10) => False
- * complete(tiles11) => False
- * complete(tiles12) => False
- * complete(tiles13) => True
- * complete(tiles14) => True
- * complete(tiles15) => False
- * complete(tiles16) => False
- *
- * Complexity Variable
- * N - Number of tiles in the input string
+ You've decided to make an advanced version of a
+ variant of the game Mahjong, incorporating runs.
+
+ Players have a number of hand, each marked 0-9.
+ The hand can be grouped into pairs or triples of
+ the same tile or runs.
+
+ A run is a series of three consecutive hand,
+ like 123, 678, or 456. 0 counts as the lowest tile,
+ so 012 is a valid run, but 890 is not.
+
+ A complete hand consists of exactly one pair, and
+ any number (including zero) of triples and/or
+ three-tile runs. Each tile is used in exactly one
+ triple, pair, or run.
+
+ Write a function that returns true or false
+ depending on whether or not the collection
+ represents a complete hand under these rules.
+
+ hand1 = "11123"          # True. 11 123
+ hand2 = "12131"          # True. Also 11 123. hand are not necessarily sorted.
+ hand3 = "11123455"       # True. 111 234 55
+ hand4 = "11122334"       # True. 11 123 234
+ hand5 = "11234"          # True. 11 234
+ hand6 = "123456"         # False. Needs a pair
+ hand7 = "11133355577"    # True. 111 333 555 77
+ hand8 = "11223344556677" # True. 11 234 234 567 567 among others
+ hand9 = "12233444556677" # True. 123 234 44 567 567
+ hand10 = "11234567899"   # False.
+ hand11 = "00123457"      # False.
+ hand12 = "0012345"       # False. A run is only three hand
+ hand13 = "11890"         # False. 890 is not a valid run
+ hand14 = "99"            # True.
+ hand15 = "111223344"     # False.
+
+ All Test Cases
+ advanced(hand1)  => True
+ advanced(hand2)  => True
+ advanced(hand3)  => True
+ advanced(hand4)  => True
+ advanced(hand5)  => True
+ advanced(hand6)  => False
+ advanced(hand7)  => True
+ advanced(hand8)  => True
+ advanced(hand9)  => True
+ advanced(hand10) => False
+ advanced(hand11) => False
+ advanced(hand12) => False
+ advanced(hand13) => False
+ advanced(hand14) => True
+ advanced(hand15) => False
+
+ Complexity Variable
+ N - Number of hand in the input string
  */
-public class MiniMahjongWinningHand {
+public class MiniMahjongWinningHand2 {
+
   public boolean isWinningHand(String hand) {
-    Map<Character, Integer> map = new HashMap<>();
+    Map<Integer, Integer> map = new HashMap<>();
     for (int i = 0; i < hand.length(); i++) {
-      char c = hand.charAt(i);
+      int c = hand.charAt(i) - '0';
       map.put(c, map.getOrDefault(c, 0) + 1);
     }
 
-    boolean pairFound = false;
-    for (Integer count : map.values()) {
-      if (count % 3 == 2) {
-        if (!pairFound) {
-          pairFound = true;
-        } else {
-          return false;
-        }
-      } else if (count % 3 != 0) {
+    for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+      if (entry.getValue() < 2) continue;
+      Map<Integer, Integer> newMap = new HashMap<>(map);
+      newMap.put(entry.getKey(),
+          entry.getValue() - 2);
+      if (isWinningHand(newMap)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean isWinningHand(Map<Integer,
+      Integer> newMap) {
+    // remove triplets
+    for (int i = 0; i <= 9; i++) {
+      int val = newMap.getOrDefault(i, 0);
+      newMap.put(i, val % 3);
+    }
+
+    //remove all possible runs
+    for (int i = 0; i < 7; i++) {
+      int val1 = newMap.getOrDefault(i, 0);
+      int val2 = newMap.getOrDefault(i+1, 0);
+      int val3 = newMap.getOrDefault(i+2, 0);
+      int run = Math.min(Math.min(val1, val2),
+          val3);
+      if (run > 0) {
+        newMap.put(i, val1 - run);
+        newMap.put(i+1, val2 - run);
+        newMap.put(i+2, val3 - run);
+      }
+    }
+
+    // any value remaining
+    for (Integer value : newMap.values()) {
+      if (value > 0) {
         return false;
       }
     }
-    return pairFound;
+
+    return true;
   }
 
   public static void main(String[] args) {
-    String tiles1 = "11133555";
-    String tiles2 = "111333555";
-    String tiles3 = "00000111";
-    String tiles4 = "13233121";
-    String tiles5 = "11223344555";
-    String tiles6 = "99999999";
-    String tiles7 = "999999999";
-    String tiles8 = "9";
-    String tiles9 = "99";
-    String tiles10 = "000022";
-    String tiles11 = "888889";
-    String tiles12 = "889";
-    String tiles13 = "88888844";
-    String tiles14 = "77777777777777";
-    String tiles15 = "1111111";
-    String tiles16 = "1111122222";
-    MiniMahjongWinningHand obj =
-        new MiniMahjongWinningHand();
-    System.out.println(tiles1 + ":" + obj.isWinningHand(tiles1));
-    System.out.println(tiles2 + ":" + obj.isWinningHand(tiles2));
-    System.out.println(tiles3 + ":" + obj.isWinningHand(tiles3));
-    System.out.println(tiles4 + ":" + obj.isWinningHand(tiles4));
-    System.out.println(tiles5 + ":" + obj.isWinningHand(tiles5));
-    System.out.println(tiles6 + ":" + obj.isWinningHand(tiles6));
-    System.out.println(tiles7 + ":" + obj.isWinningHand(tiles7));
-    System.out.println(tiles8 + ":" + obj.isWinningHand(tiles8));
-    System.out.println(tiles9 + ":" + obj.isWinningHand(tiles9));
-    System.out.println(tiles10 + ":" + obj.isWinningHand(tiles10));
-    System.out.println(tiles11 + ":" + obj.isWinningHand(tiles11));
-    System.out.println(tiles12 + ":" + obj.isWinningHand(tiles12));
-    System.out.println(tiles13 + ":" + obj.isWinningHand(tiles13));
-    System.out.println(tiles14 + ":" + obj.isWinningHand(tiles14));
-    System.out.println(tiles15 + ":" + obj.isWinningHand(tiles15));
-    System.out.println(tiles16 + ":" + obj.isWinningHand(tiles16));
+    String hand1 = "11123";
+    String hand2 = "12131";
+    String hand3 = "11123455";
+    String hand4 = "11122334";
+    String hand5 = "11234";
+    String hand6 = "123456";
+    String hand7 = "11133355577";
+    String hand8 = "11223344556677";
+    String hand9 = "12233444556677";
+    String hand10 = "11234567899";
+    String hand11 = "00123457";
+    String hand12 = "0012345";
+    String hand13 = "11890";
+    String hand14 = "99";
+    String hand15 = "111223344";
+    MiniMahjongWinningHand2 obj =
+        new MiniMahjongWinningHand2();
+    System.out.println(hand1 + ":" + obj.isWinningHand(hand1));
+    System.out.println(hand2 + ":" + obj.isWinningHand(hand2));
+    System.out.println(hand3 + ":" + obj.isWinningHand(hand3));
+    System.out.println(hand4 + ":" + obj.isWinningHand(hand4));
+    System.out.println(hand5 + ":" + obj.isWinningHand(hand5));
+    System.out.println(hand6 + ":" + obj.isWinningHand(hand6));
+    System.out.println(hand7 + ":" + obj.isWinningHand(hand7));
+    System.out.println(hand8 + ":" + obj.isWinningHand(hand8));
+    System.out.println(hand9 + ":" + obj.isWinningHand(hand9));
+    System.out.println(hand10 + ":" + obj.isWinningHand(hand10));
+    System.out.println(hand11 + ":" + obj.isWinningHand(hand11));
+    System.out.println(hand12 + ":" + obj.isWinningHand(hand12));
+    System.out.println(hand13 + ":" + obj.isWinningHand(hand13));
+    System.out.println(hand14 + ":" + obj.isWinningHand(hand14));
+    System.out.println(hand15 + ":" + obj.isWinningHand(hand15));
   }
 }
