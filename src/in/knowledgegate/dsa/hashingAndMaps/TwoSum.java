@@ -1,4 +1,4 @@
-package in.knowledgegate.dsa.maps;
+package in.knowledgegate.dsa.hashingAndMaps;
 
 import java.util.HashMap;
 import java.util.Map;
