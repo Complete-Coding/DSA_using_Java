@@ -8,7 +8,7 @@ import java.util.Stack;
 
 /**
  * Write Inorder traversal of a binary tree using
- * recursive approach
+ * iterative approach
  */
 public class InorderTraversalIterative {
   public List<Integer> inorderTraversal(TreeNode root) {
