@@ -1,4 +1,4 @@
-package in.knowledgegate.dsa.array;
+package in.knowledgegate.dsa.binarysearch.problems;
 
 /**
  * Given a sorted array of distinct integers and a target value, return the
