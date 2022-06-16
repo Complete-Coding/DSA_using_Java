@@ -26,3 +26,5 @@ hs_err_pid*
 *.iml
 build/
 out/
+.DS_Store
+
