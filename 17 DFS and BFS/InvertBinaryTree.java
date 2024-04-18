@@ -1,5 +1,4 @@
 
-import in.knowledgegate.dsa.binarytree.model.TreeNode;
 
 /**
  * Given the root of a binary tree, invert the
