@@ -1,4 +1,3 @@
-
 class ListNode {
 
   public int val;
