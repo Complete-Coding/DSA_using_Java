@@ -33,16 +33,24 @@ class ConvertNumberToHexadecimal {
     }
 
     public String toHex(int num) {
-        char[] mapping = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                'a', 'b', 'c', 'd', 'e', 'f' };
         if (num == 0)
             return "0";
+
+        char[] mapping = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
         StringBuilder result = new StringBuilder();
-        while (num > 0) {
-            int endBits = num & 15;
-            result.insert(0, mapping[endBits]);
-            num = num >> 4;
+
+        // Process 32 bits, regardless of whether num is positive or negative
+        for (int i = 0; i < 8; i++) {
+            int endBits = num & 15;  // Get the last 4 bits
+            result.insert(0, mapping[endBits]);  // Convert to hex and add to the front of the result
+            num = num >>> 4;  // Logically shift right, filling with zeros (important for negative numbers)
         }
+
+        // Remove leading zeros
+        while (result.length() > 1 && result.charAt(0) == '0') {
+            result.deleteCharAt(0);
+        }
+
         return result.toString();
     }
 }

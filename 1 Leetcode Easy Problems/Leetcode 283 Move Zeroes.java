@@ -30,12 +30,15 @@ class MoveZeros {
     }
 
     public void moveZeroes(int[] nums) {
-        int prev = 0;
+        int prev = 0; // This will track the position to place the next non-zero element.
         for (int i = 0; i < nums.length; i++) {
-            if (nums[i] != 0) {
-                nums[prev++] = nums[i];
-                nums[i] = 0;
+          if (nums[i] != 0) {
+            nums[prev] = nums[i]; // Place the non-zero element at the 'prev' position
+            if (i != prev) { // Only set to zero if it's actually a move
+              nums[i] = 0;
             }
+            prev++; // Move the 'prev' position forward
+          }
         }
-    }
+      }
 }
