@@ -46,16 +46,16 @@ class GuessNumberHigherOrLower {
     }
 
     public int guessNumber(int n) {
-        int beg = 1, end = n;
+        long beg = 1, end = n;
         while (beg <= end) {
-            int mid = (beg + end) / 2;
-            int res = guess(mid);
-            if (res == 0)
-                return mid;
-            if (res == -1)
-                end = mid - 1;
-            else
-                beg = mid + 1;
+          int mid = (int) ((beg + end) / 2);
+          int res = guess(mid);
+          if (res == 0)
+            return mid;
+          if (res == -1)
+            end = mid - 1;
+          else
+            beg = mid + 1;
         }
         return -1;
     }

@@ -31,19 +31,19 @@ class ArrangingCoins {
     }
 
     private int arrangeCoins(int n) {
-        int begin = 0;
-        int end = n;
+        long begin = 0;
+        long end = (int) Math.sqrt(2 * (long) n); // Adjust the initial end value
         while (begin <= end) {
-            int mid = (begin + end) / 2;
-            int coinsUsed = (mid * (mid + 1)) / 2;
-            if (coinsUsed == n)
-                return mid;
-            if (coinsUsed < n) {
-                begin = mid + 1;
-            } else {
-                end = mid - 1;
-            }
+          long mid = (begin + end) / 2;
+          long coinsUsed = (mid * (mid + 1)) / 2;
+          if (coinsUsed == n)
+            return (int) mid;
+          if (coinsUsed < n) {
+            begin = mid + 1;
+          } else {
+            end = mid - 1;
+          }
         }
-        return end;
+        return (int) end;
     }
 }
