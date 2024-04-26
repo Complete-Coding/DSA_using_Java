@@ -1,6 +1,3 @@
-
-import in.knowledgegate.dsa.binarytree.model.TreeNode;
-
 /**
  * Given the root of a binary tree and an integer
  * targetSum, return true if the tree has a
