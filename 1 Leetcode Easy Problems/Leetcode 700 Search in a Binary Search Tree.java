@@ -1,6 +1,3 @@
-
-import in.knowledgegate.dsa.binarytree.model.TreeNode;
-
 /**
  * You are given the root of a binary search tree
  * (BST) and an integer val.
@@ -45,3 +42,16 @@ class SearchInBST {
     return searchBST(root.left, val);
   }
 }
+
+class TreeNode {
+      int val;
+      TreeNode left;
+      TreeNode right;
+      TreeNode() {}
+      TreeNode(int val) { this.val = val; }
+      TreeNode(int val, TreeNode left, TreeNode right) {
+          this.val = val;
+          this.left = left;
+          this.right = right;
+      }
+  }
